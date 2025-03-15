@@ -1,0 +1,50 @@
+<div class="carrito-container">
+    <h2 class="carrito-titulo">Carrito de compras</h2>
+
+    <div class="carrito-contenido" *ngIf="carrito.length > 0">
+        <ul class="carrito-lista">
+            <li class="carrito-item" *ngFor="let producto of carrito; let i = index">
+                <div class="producto-info">
+                    <span class="producto-nombre">{{ producto.nombre }}</span>
+                    <span class="producto-precio">${{ producto.precio }} MXN</span>
+                </div>
+                <button class="eliminar-button" (click)="eliminarProducto(i)">Eliminar</button>
+            </li>
+        </ul>
+
+        <div class="carrito-resumen">
+            <div class="carrito-total">
+                <div class="subtotal">
+                    <span>Subtotal: </span>
+                    <span>${{ calcularSubtotal() }} MXN</span>
+                </div>
+
+                <div class="iva">
+                    <span>IVA (16%): </span>
+                    <span>${{ calcularIVA() | number: '1.2-2' }} MXN</span> 
+                </div>
+                
+                <div class="total">
+                    <span>Total: </span>
+                    <span>${{ calcularTotal() }} MXN</span>
+                </div>
+
+            </div>
+            <!-- Botón para generar el recibo, visible solo si no se ha generado -->
+            <button class="recibo-button" *ngIf="!recibo" (click)="generarXML()">Generar Recibo</button>
+
+            <!-- Botón para descargar el XML, visible solo cuando se genera el recibo -->
+            <button class="recibo-button" *ngIf="recibo" (click)="descargarRecibo()">Descargar XML</button>
+        </div>
+    </div>
+
+    <p *ngIf="carrito.length === 0" class="carrito-vacio">
+        <i class="fa-solid fa-cart-shopping"></i>
+        El carrito está vacío
+    </p>
+
+    <div *ngIf="recibo" class="recibo">
+        <h3 class="recibo-titulo">Recibo</h3>
+        <pre class="recibo-contenido">{{ recibo }}</pre>
+    </div>
+</div>
