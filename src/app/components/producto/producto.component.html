@@ -13,7 +13,10 @@
       <img [src]="producto.imagen" alt="{{producto.nombre}}">
       <h3>{{producto.nombre}}</h3>
       <p>Precio: ${{producto.precio}} MXN</p>
-      <button (click)="agregarAlCarrito(producto)">Agregar al carrito</button>
+      <button (click)="agregarAlCarrito(producto)">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Añadir
+      </button>
     </div>
   </div>
 </main>
