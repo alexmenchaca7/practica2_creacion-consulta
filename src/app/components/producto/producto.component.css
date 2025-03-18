@@ -64,7 +64,12 @@
     transform: scale(1.01);
 }
 
-.carrito-button {
+.acciones {
+    display: flex;
+    gap: 2rem;
+}
+
+.acciones__boton {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -81,7 +86,7 @@
     transition: background-color 0.3s ease;
 }
 
-.carrito-button:hover {
+.acciones__boton:hover {
     background-color: oklch(0.45 0.085 224.283);
 }
 

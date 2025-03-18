@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { Producto } from '../../models/producto'; 
-import { ProductoService } from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
+import { Producto } from '../../models/producto'; 
+import { InventarioService } from '../../services/inventario.service';
 import { CarritoService } from '../../services/carrito.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-producto',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './producto.component.html',
-  styleUrls: ['./producto.component.css'] // Cambiado a styleUrls
+  styleUrls: ['./producto.component.css']
 })
 export class ProductoComponent implements OnInit {
-
   productos: Producto[] = [];
   mensajeExito: boolean = false;
 
-
   constructor(
-    private productoService: ProductoService,
+    private inventarioService: InventarioService,
     private carritoService: CarritoService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.productos = this.productoService.obtenerProducto();
+    this.productos = this.inventarioService.obtenerProductos();
+    this.cargarImagenes();
   }
 
   agregarAlCarrito(producto: Producto): void {
@@ -42,5 +42,20 @@ export class ProductoComponent implements OnInit {
 
   irAlCarrito(): void {
     this.router.navigate(['/carrito']);
+  }
+
+  irAlInventario(): void {
+    this.router.navigate(['/inventario']);
+  }
+
+  private cargarImagenes(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.productos.forEach(producto => {
+        const dataUrl = localStorage.getItem(producto.imagen);
+        if (dataUrl) {
+          producto.imagen = dataUrl;
+        }
+      });
+    }
   }
 }

@@ -1,5 +1,12 @@
 <div class="carrito-container">
-    <h2 class="carrito-titulo">Carrito de compras</h2>
+    <div class="header">
+        <button class="acciones__boton" (click)="irAProductos()">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+          Regresar
+        </button>
+      
+        <h2>Carrito de compras</h2>
+    </div>
 
     <div class="carrito-contenido" *ngIf="carrito.length > 0">
         <ul class="carrito-lista">

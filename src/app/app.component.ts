@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'] // Cambiado a styleUrls
 })
+
 export class AppComponent {
   title = 'practica2_creacion-consulta';
 }

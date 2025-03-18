@@ -8,6 +8,45 @@
     background-color: #ffffff;
 }
 
+.header {
+    background-color: #000;
+    border-radius: 10px 10px 0 0;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.header h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.acciones__boton {
+    all: unset;
+    text-align: center;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.acciones__boton:hover {
+    transform: scale(1.01);
+}
+
 /* Título con mejor posicionamiento */
 .carrito-titulo {
     text-align: center;
