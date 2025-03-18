@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { CarritoService } from '../../services/carrito.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderComponent],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../header/header.component';
 import { Producto } from '../../models/producto'; 
 import { InventarioService } from '../../services/inventario.service';
 import { CarritoService } from '../../services/carrito.service';
@@ -9,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-producto',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderComponent],
   templateUrl: './producto.component.html',
   styleUrls: ['./producto.component.css']
 })

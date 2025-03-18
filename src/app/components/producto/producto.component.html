@@ -1,3 +1,5 @@
+<app-header></app-header>
+
 <!-- Contenedor para el mensaje de éxito -->
 <div *ngIf="mensajeExito" class="mensaje-exito">
   Producto agregado al carrito con éxito!
@@ -13,17 +15,5 @@
       <p>Precio: ${{producto.precio}} MXN</p>
       <button (click)="agregarAlCarrito(producto)">Agregar al carrito</button>
     </div>
-  </div>
-  
-  <div class="acciones">
-    <button class="acciones__boton" (click)="irAlCarrito()">
-      <i class="fa-solid fa-cart-shopping"></i>
-      Ir al carrito
-    </button>
-  
-    <button class="acciones__boton" (click)="irAlInventario()">
-      <i class="fa-solid fa-boxes-stacked"></i>
-      Administrar Inventario
-    </button>
   </div>
 </main>
