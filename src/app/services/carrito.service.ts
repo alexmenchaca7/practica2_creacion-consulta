@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Producto } from '../models/producto';
+import { InventarioService } from './inventario.service';
 import { DOMParser } from 'xmldom';
 
 @Injectable({
@@ -9,19 +10,31 @@ export class CarritoService {
   private carrito: Producto[] = [];
   private tiendaNombre: string = 'Tienda de Tenis';
 
-  constructor() {
+  constructor(private inventarioService: InventarioService) {
     this.cargarCarrito();
   }
 
   eliminarProducto(index: number) {
     if (index >= 0 && index < this.carrito.length) {
-      this.carrito.splice(index, 1);
+      const producto = this.carrito[index];
+      if (producto.cantidad && producto.cantidad > 1) {
+        producto.cantidad -= 1;
+      } else {
+        this.carrito.splice(index, 1);
+      }
+      this.inventarioService.actualizarProductoCantidad(producto.id, this.inventarioService.obtenerProductoCantidad(producto.id) + 1); // Devolver la cantidad al inventario
       this.guardarCarrito();
     }
   }
 
   agregarProducto(producto: Producto) {
-    this.carrito.push(producto);
+    const productoExistente = this.carrito.find(p => p.id === producto.id);
+    if (productoExistente) {
+      productoExistente.cantidad! += 1;
+    } else {
+      this.carrito.push({ ...producto, cantidad: 1 });
+    }
+    this.inventarioService.actualizarProductoCantidad(producto.id, this.inventarioService.obtenerProductoCantidad(producto.id) - 1); // Restar la cantidad del inventario
     this.guardarCarrito();
   }
 
@@ -40,6 +53,7 @@ export class CarritoService {
       xml += `    <producto id="${producto.id}">\n`;
       xml += `      <nombre>${producto.nombre}</nombre>\n`;
       xml += `      <precio>${producto.precio}</precio>\n`;
+      xml += `      <cantidad>${producto.cantidad}</cantidad>\n`;
       xml += `    </producto>\n`;
     });
     xml += `  <subtotal>$${subtotal}</subtotal>\n`;
@@ -51,7 +65,7 @@ export class CarritoService {
   }
 
   private calcularSubtotal(): number {
-    return this.carrito.reduce((acc, producto) => acc + (producto.precio ?? 0), 0);
+    return this.carrito.reduce((acc, producto) => acc + (producto.precio ?? 0) * (producto.cantidad ?? 1), 0);
   }
 
   private guardarCarrito(): void {
@@ -76,6 +90,7 @@ export class CarritoService {
       xml += `  <producto id="${producto.id}">\n`;
       xml += `    <nombre>${producto.nombre}</nombre>\n`;
       xml += `    <precio>${producto.precio}</precio>\n`;
+      xml += `    <cantidad>${producto.cantidad}</cantidad>\n`;
       xml += `    <imagen>${producto.imagen}</imagen>\n`;
       xml += `  </producto>\n`;
     });
@@ -93,8 +108,9 @@ export class CarritoService {
       const id = Number(productoNode.getAttribute('id'));
       const nombre = productoNode.getElementsByTagName('nombre')[0].textContent || '';
       const precio = Number(productoNode.getElementsByTagName('precio')[0].textContent);
+      const cantidad = Number(productoNode.getElementsByTagName('cantidad')[0].textContent);
       const imagen = productoNode.getElementsByTagName('imagen')[0].textContent || '';
-      carrito.push(new Producto(id, nombre, precio, imagen));
+      carrito.push(new Producto(id, nombre, cantidad, precio, imagen));
     }
     return carrito;
   }

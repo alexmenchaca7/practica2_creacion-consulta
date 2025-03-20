@@ -31,6 +31,10 @@
       <input [(ngModel)]="nuevoProducto.precio" type="text" placeholder="Precio del producto" required (input)="validarNumero($event)" />
     </div>
     <div class="campo">
+      <label for="cantidad">Cantidad</label>
+      <input [(ngModel)]="nuevoProducto.cantidad" type="number" placeholder="Cantidad del producto" required />
+    </div>
+    <div class="campo">
       <label for="imagen">Imagen</label>
       <input type="file" (change)="onFileSelected($event)" required />
     </div>
@@ -45,6 +49,7 @@
       <tr>
         <th scope="col" class="table__th">Nombre</th>
         <th scope="col" class="table__th">Precio</th>
+        <th scope="col" class="table__th">Cantidad</th>
         <th scope="col" class="table__th">Imagen</th>
         <th scope="col" class="table__th"></th>
       </tr>
@@ -53,6 +58,7 @@
       <tr class="table__tr" *ngFor="let producto of productos; let i = index">
         <td class="table__td">{{ producto.nombre }}</td>
         <td class="table__td">${{ producto.precio }} MXN</td>
+        <td class="table__td">{{ producto.cantidad }}</td>
         <td class="table__td">
           <img [src]="producto.imagen" alt="{{producto.nombre}}" class="producto-imagen" />
         </td>
@@ -78,6 +84,7 @@
     <div class="formulario-actualizar">
       <input [(ngModel)]="productoSeleccionado.nombre" placeholder="Nombre del producto" required />
       <input [(ngModel)]="productoSeleccionado.precio" type="text" placeholder="Precio del producto" required (input)="validarNumero($event)" />
+      <input [(ngModel)]="productoSeleccionado.cantidad" type="number" placeholder="Cantidad del producto" required />
       <div class="campo--imagen">
         <label for="imagen">Imagen Actual</label>
         <img [src]="productoSeleccionado.imagen" alt="{{productoSeleccionado.nombre}}" class="producto-imagen" />
@@ -86,7 +93,7 @@
         <label for="imagen">Cambiar Imagen</label>
         <input type="file" (change)="onFileSelected($event, true)" />
       </div>
-      <button (click)="actualizarProducto()" [disabled]="!productoSeleccionado.nombre || !productoSeleccionado.precio">
+      <button (click)="actualizarProducto()" [disabled]="!productoSeleccionado.nombre || !productoSeleccionado.precio || productoSeleccionado.cantidad === undefined">
         Actualizar
       </button>
     </div>

@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 export class ProductoComponent implements OnInit {
   productos: Producto[] = [];
   mensajeExito: boolean = false;
+  mensajeError: string | null = null;
 
   constructor(
     private inventarioService: InventarioService,
@@ -30,15 +31,18 @@ export class ProductoComponent implements OnInit {
   }
 
   agregarAlCarrito(producto: Producto): void {
-    this.carritoService.agregarProducto(producto);
-
-    // Mostrar el mensaje de éxito
-    this.mensajeExito = true;
-
-    // Ocultar el mensaje después de 3 segundos
-    setTimeout(() => {
-      this.mensajeExito = false;
-    }, 3000);
+    if (producto.cantidad && producto.cantidad > 0) {
+      this.carritoService.agregarProducto(producto);
+      this.mensajeExito = true;
+      setTimeout(() => {
+        this.mensajeExito = false;
+      }, 3000);
+    } else {
+      this.mensajeError = 'Producto agotado!';
+      setTimeout(() => {
+        this.mensajeError = null;
+      }, 3000);
+    }
   }
 
   irAlCarrito(): void {

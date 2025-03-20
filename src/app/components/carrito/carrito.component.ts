@@ -4,6 +4,7 @@ import { CarritoService } from '../../services/carrito.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
+import { Producto } from '../../models/producto'; // Importa la clase Producto
 
 @Component({
   selector: 'app-carrito',
@@ -13,7 +14,7 @@ import { HeaderComponent } from '../header/header.component';
   styleUrls: ['./carrito.component.css']
 })
 export class CarritoComponent implements OnInit {
-  carrito: any[] = [];
+  carrito: Producto[] = [];
   recibo: string = ''; // Variable para almacenar el recibo
 
   constructor(private carritoService: CarritoService, private router: Router) {}
@@ -40,7 +41,7 @@ export class CarritoComponent implements OnInit {
   }
 
   calcularSubtotal() {
-    return this.carrito.reduce((subtotal, producto) => subtotal + (producto.precio ?? 0), 0);
+    return this.carrito.reduce((subtotal, producto) => subtotal + (producto.precio ?? 0) * (producto.cantidad ?? 1), 0);
   }
 
   calcularIVA() {

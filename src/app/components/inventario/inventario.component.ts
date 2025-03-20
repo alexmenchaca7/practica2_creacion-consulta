@@ -15,8 +15,8 @@ import { Producto } from '../../models/producto';
 })
 export class InventarioComponent implements OnInit {
   productos: Producto[] = [];
-  nuevoProducto: Producto = new Producto(0, '', undefined, ''); // Initialize precio as undefined
-  productoSeleccionado: Producto = new Producto(0, '', undefined, ''); // Initialize precio as undefined
+  nuevoProducto: Producto = new Producto(0, '', undefined, undefined, ''); // Initialize precio and cantidad as undefined
+  productoSeleccionado: Producto = new Producto(0, '', undefined, undefined, ''); // Initialize precio and cantidad as undefined
   productoIndex: number = -1;
   mostrarModal: boolean = false;
   selectedFile: File | null = null;
@@ -47,12 +47,16 @@ export class InventarioComponent implements OnInit {
   }
 
   agregarProducto(): void {
-    if (!this.nuevoProducto.nombre || this.nuevoProducto.precio === undefined || !this.selectedFile) {
+    if (!this.nuevoProducto.nombre || this.nuevoProducto.cantidad === undefined || !this.selectedFile) {
       this.mostrarMensajeError('Todos los campos son obligatorios!');
       return;
     }
-    if (isNaN(Number(this.nuevoProducto.precio))) {
+    if (this.nuevoProducto.precio !== undefined && isNaN(Number(this.nuevoProducto.precio))) {
       this.mostrarMensajeError('El precio debe ser un número válido!');
+      return;
+    }
+    if (this.nuevoProducto.cantidad !== undefined && isNaN(Number(this.nuevoProducto.cantidad))) {
+      this.mostrarMensajeError('La cantidad debe ser un número válido!');
       return;
     }
     if (this.selectedFile) {
@@ -60,17 +64,19 @@ export class InventarioComponent implements OnInit {
       this.nuevoProducto.imagen = filePath;
       this.inventarioService.saveFile(this.selectedFile, filePath);
     }
-    this.nuevoProducto.precio = Number(this.nuevoProducto.precio); // Convert precio to number
+    this.nuevoProducto.precio = this.nuevoProducto.precio !== undefined ? Number(this.nuevoProducto.precio) : undefined; // Convert precio to number if defined
+    this.nuevoProducto.cantidad = this.nuevoProducto.cantidad !== undefined ? Number(this.nuevoProducto.cantidad) : 0; // Convert cantidad to number if defined, default to 0
     this.inventarioService.agregarProducto(this.nuevoProducto);
     this.cargarImagenes(); // Cargar las imágenes desde el localStorage
-    this.nuevoProducto = new Producto(0, '', undefined, ''); // Reset precio to undefined
+    this.nuevoProducto = new Producto(0, '', undefined, undefined, ''); // Reset precio and cantidad to undefined
     this.selectedFile = null;
     this.mostrarMensajeExito('Producto agregado con éxito!');
   }
 
   abrirModal(producto: Producto, index: number): void {
     this.productoSeleccionado = { ...producto };
-    this.productoSeleccionado.precio = Number(this.productoSeleccionado.precio); // Ensure precio is a number
+    this.productoSeleccionado.precio = this.productoSeleccionado.precio !== undefined ? Number(this.productoSeleccionado.precio) : undefined; // Ensure precio is a number if defined
+    this.productoSeleccionado.cantidad = this.productoSeleccionado.cantidad !== undefined ? Number(this.productoSeleccionado.cantidad) : undefined; // Ensure cantidad is a number if defined
     this.productoIndex = index;
     this.mostrarModal = true;
     document.body.style.overflow = 'hidden'; // Disable scroll
@@ -90,12 +96,16 @@ export class InventarioComponent implements OnInit {
   }
 
   actualizarProducto(): void {
-    if (!this.productoSeleccionado.nombre || this.productoSeleccionado.precio === undefined) {
+    if (!this.productoSeleccionado.nombre || this.productoSeleccionado.cantidad === undefined) {
       this.mostrarMensajeError('Todos los campos son obligatorios!');
       return;
     }
-    if (isNaN(Number(this.productoSeleccionado.precio))) {
+    if (this.productoSeleccionado.precio !== undefined && isNaN(Number(this.productoSeleccionado.precio))) {
       this.mostrarMensajeError('El precio debe ser un número válido!');
+      return;
+    }
+    if (this.productoSeleccionado.cantidad !== undefined && isNaN(Number(this.productoSeleccionado.cantidad))) {
+      this.mostrarMensajeError('La cantidad debe ser un número válido!');
       return;
     }
     if (this.selectedFile) {
@@ -105,7 +115,8 @@ export class InventarioComponent implements OnInit {
       this.inventarioService.saveFile(this.selectedFile, newFilePath);
       this.inventarioService.deleteFile(oldFilePath);
     }
-    this.productoSeleccionado.precio = Number(this.productoSeleccionado.precio); // Convert precio to number
+    this.productoSeleccionado.precio = this.productoSeleccionado.precio !== undefined ? Number(this.productoSeleccionado.precio) : undefined; // Convert precio to number if defined
+    this.productoSeleccionado.cantidad = this.productoSeleccionado.cantidad !== undefined ? Number(this.productoSeleccionado.cantidad) : 0; // Convert cantidad to number if defined, default to 0
     this.inventarioService.actualizarProducto(this.productoIndex, this.productoSeleccionado);
     this.productos[this.productoIndex] = { ...this.productoSeleccionado };
     this.cargarImagenes(); // Cargar las imágenes desde el localStorage

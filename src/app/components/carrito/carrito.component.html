@@ -16,6 +16,7 @@
                 <div class="producto-info">
                     <span class="producto-nombre">{{ producto.nombre }}</span>
                     <span class="producto-precio">${{ producto.precio }} MXN</span>
+                    <span class="producto-cantidad">Cantidad: {{ producto.cantidad }}</span>
                 </div>
                 <button class="eliminar-button" (click)="eliminarProducto(i)">Eliminar</button>
             </li>
